@@ -218,3 +218,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+
+# Ignoring the Data 
+# so big CWRU files dont get commited
+data/
