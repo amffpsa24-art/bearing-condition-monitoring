@@ -1,4 +1,5 @@
 import paho.mqtt.client as mqtt
+import json
 
 # on_message function -> Callback, function paho calls everytime message arrives
 
@@ -16,10 +17,12 @@ def on_message(client, userdata, message):
             message.payload is the content as bytes, so it needs .decode() to become text.
     '''
     topic = message.topic     # topic as a string
-    payload = message.payload.decode() # content as bytes. (to make it string -> .decode())
+    payload = message.payload.decode()  # decoded() to json string
+    data = json.loads(payload)
 
     print(f'{topic}: {payload}')
-
+     # dictionary of 3 variables from publisher
+    print(f'{data["sensor_id"]} | {data["timestamp"]} | {len(data["values"])} items')
 # Creating client
 client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 
@@ -30,7 +33,7 @@ client.on_message = on_message   # handing Paho function itself, for later call
 client.connect(host="localhost", port=1883)
 
 # Subscribe
-client.subscribe(topic = "test", qos = 0)
+client.subscribe(topic = "plant/+/+/vibration", qos = 0)
 
 # Run loop forever
 client.loop_forever()

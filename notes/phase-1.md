@@ -104,3 +104,7 @@ Examples of applications:
     6. Subscriptions (Optional): If client is a subscriber, it can then send "Subscribe" packets to broker, indicating topics it wants to subscribe to.
     7. Publishing messages: Once connection is made, clients can publish messages to topics or subscribe to topics to receive messages from other clients.
     8. Keep-Alive: TO maintain connection, clients periodically exchange "Ping" packets to confirm that the connection is still active.
+
+    # Creation of Test publisher + subscriber python scripts
+    1. In directory of project, created publisher + subscriber python scripts that connect to the MQTT mosquitto broker runnning in docker.
+    

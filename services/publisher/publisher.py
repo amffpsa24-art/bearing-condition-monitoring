@@ -1,5 +1,9 @@
 import paho.mqtt.client as mqtt
 
+import json
+from datetime import datetime, date, timezone
+import random    # fake values
+
 # Create a client
 # Client -> Object that connects to broker - later steps is a method on it.
 client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
@@ -36,9 +40,35 @@ and sending keep-alive pings. That's the network loop! loop_start() runs
 it in the background while the script continues. Without it, message can 
 get stuck and never leave.
 '''
+timestamp = datetime.now(timezone.utc).isoformat()
+print(timestamp)
+
+# Simulating vibration values for Healthy vibrations 
+sigma = 0.1
+mu = 0
+
+n = 10  # number of values generated 
+# List comprehension - generating a list of n values of vibrations
+values = [random.gauss(mu, sigma) for _ in range(n)]  #_ is loop variable. no need, so _
+
+print(values)
+print(len(values))
+
+# Generating the payload json dictionary
+
+payload = {"sensor_id":"bearing1",  # Identitication of data sensor id
+           "timestamp": timestamp,  # When data was created
+           "sample_rate_hz":12000,  # How measured: 12000 samples/sec
+           "units":"g",             # Unit: g, m/s^2, volts or ADC work
+           "values":values}         # What was measured: n samples in g
+
+# Network can only carry text or bytes. so json dict needs to be converted
+payload_json = json.dumps(payload)
+# Checking transformation from dict to json
+print(payload_json)  # json always uses "..." with type str, text.
 
 # Publish and wait for it to go out (test)
-info = client.publish(topic="test", payload="hello from Python", qos=0)
+info = client.publish(topic="plant/line1/bearing1/vibration", payload=payload_json, qos=0)
 info.wait_for_publish()
 
 # Clean Up
@@ -46,3 +76,4 @@ info.wait_for_publish()
 client.disconnect()
 # Ends the loop, so the script can finish instead of leaving it hanging.   
 client.loop_stop()
+
