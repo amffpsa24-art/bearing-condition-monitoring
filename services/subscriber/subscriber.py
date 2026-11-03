@@ -17,12 +17,13 @@ def on_message(client, userdata, message):
             message.payload is the content as bytes, so it needs .decode() to become text.
     '''
     topic = message.topic     # topic as a string
-    payload = message.payload.decode()  # decoded() to json string
+    payload = message.payload.decode()  # decode() to json string
     data = json.loads(payload)
 
-    print(f'{topic}: {payload}')
-     # dictionary of 3 variables from publisher
+    # print(f'{topic}: {payload}')
+     # dictionary of 5 keys, printing 3 variables from publisher
     print(f'{data["sensor_id"]} | {data["timestamp"]} | {len(data["values"])} items')
+
 # Creating client
 client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 
